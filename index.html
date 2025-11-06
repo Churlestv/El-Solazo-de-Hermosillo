@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>El Solazo de Hermosillo</title>
+
+  <!-- Favicon: reemplaza ./assets/favicon.ico con tu propio ícono -->
+  <link rel="icon" href="sol.png" />
+
+  <!-- Prerender / Prefetch - mejora percibida y SEO cuando tenga sentido -->
+  <link rel="prerender" href="/en-vivo">
+  <link rel="prerender" href="/clima">
+  <link rel="preload" href="./style.css" as="style">
+
+  <meta name="theme-color" content="#fff" id="meta-theme-color">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <button id="menu-toggle" aria-label="Abrir menú" class="icon-btn">☰</button>
+        <a class="logo" href="#" aria-label="Inicio - El Solazo de Hermosillo">
+        <img src="new logo.jpg" alt="Logo de mi sitio web" width="100" height="50">
+          </div>
+        </a>
+      </div>
+
+      <nav class="main-nav" id="main-nav" aria-label="Menú principal">
+        <ul>
+          <li><button class="nav-link" data-cat="todos">Inicio</button></li>
+          <li><button class="nav-link" data-cat="mundo">MUNDO Y NACIONAL 🌍</button></li>
+          <li><button class="nav-link" data-cat="sonora">SONORA HOY 🌵</button></li>
+          <li><button class="nav-link" data-cat="seguridad">SEGURIDAD Y JUSTICIA 🚨</button></li>
+          <li class="has-sub">
+            <button class="nav-link" data-cat="sociedad">SOCIEDAD Y VIRAL 💬</button>
+            <div class="subtext">Hermosillo · Nogales · Magdalena · Obregón · Otras</div>
+          </li>
+          <li><button class="nav-link" data-cat="cultura">CULTURA, CIENCIA Y ENTRETENIMIENTO 💡</button></li>
+          <li><a class="nav-link" href="/en-vivo" id="en-vivo-link">En vivo</a></li>
+          <li><a class="nav-link" href="clima.html" id="clima-link">Clima</a></li>
+          <li><button id="favorites-view" class="nav-link">Favoritos ★</button></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <button id="toggle-theme" class="icon-btn" title="Modo oscuro">🌙</button>
+        <button id="notify-perm" class="icon-btn" title="Activar notificaciones">🔔</button>
+        <button id="login-btn" class="btn-outline">Iniciar sesión</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <h2 class="lead">El sol de la noticia — información clara y directa desde Sonora</h2>
+          <p class="lead-sub">Cobertura local, estatal y nacional con mirada periodística y diseño elegante.</p>
+        </div>
+        <div class="hero-right">
+          <div class="hero-spot">EN VIVO</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="controls">
+      <div class="search-wrap">
+        <input id="search" placeholder="Buscar noticia..." aria-label="Buscar noticias" />
+        <button id="search-btn" class="icon-btn">🔎</button>
+      </div>
+      <div class="filters">
+        <label>Ordenar:</label>
+        <select id="sort">
+          <option value="new">Más recientes</option>
+          <option value="old">Más antiguas</option>
+        </select>
+      </div>
+    </section>
+
+    <section id="news-grid" class="news-grid" aria-live="polite">
+      <div class="placeholder">Cargando noticias…</div>
+    </section>
+
+    <div class="pager">
+      <button id="load-more" class="btn">Cargar más</button>
+    </div>
+  </main>
+
+  <!-- Modal: Login -->
+  <div id="login-modal" class="modal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="login-title">
+      <button class="modal-close" id="close-login" aria-label="Cerrar">✕</button>
+      <h2 id="login-title">Iniciar sesión</h2>
+
+      <form id="login-form" class="login-form">
+        <label>
+          Correo
+          <input type="email" id="login-email" required placeholder="tu@correo.com" />
+        </label>
+        <label>
+          Contraseña
+          <input type="password" id="login-pass" required minlength="6" placeholder="●●●●●●" />
+        </label>
+        <div class="login-actions">
+          <button type="submit" class="btn">Entrar</button>
+          <button type="button" id="login-guest" class="btn-outline">Invitado</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Template -->
+  <template id="tpl-article">
+    <article class="card">
+      <div class="card-media">
+        <img src="" alt="" loading="lazy" />
+        <div class="card-tags"></div>
+      </div>
+      <div class="card-body">
+        <div class="meta">
+          <time class="published"></time>
+          <button class="fav-btn" aria-label="Agregar a favoritos">☆</button>
+        </div>
+        <h3 class="title"></h3>
+        <p class="excerpt"></p>
+        <div class="card-footer">
+          <button class="share-btn" aria-label="Compartir">Compartir</button>
+          <a class="read-more" href="#" target="_blank" rel="noopener">Leer</a>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-cols">
+        <div>
+          <h4>El Solazo</h4>
+          <small>© <span id="year"></span> El Solazo de Hermosillo</small>
+        </div>
+        <div>
+          <a href="#">Privacidad</a>
+          <a href="#">Contacto</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
