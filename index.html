@@ -6,7 +6,7 @@
   <title>El Solazo de Hermosillo</title>
 
   <!-- Favicon: reemplaza ./assets/favicon.ico con tu propio ícono -->
-  <link rel="icon" href="sol.png" />
+  <link rel="icon" href="new logo.jpg" />
 
   <!-- Prerender / Prefetch - mejora percibida y SEO cuando tenga sentido -->
   <link rel="prerender" href="/en-vivo">
@@ -17,6 +17,9 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
+      <!-- ☀️ Sol de fondo -->
+  <div class="sun-bg" id="sun"></div>
+
   <header class="site-header">
     <div class="container header-inner">
       <div class="brand">
@@ -24,6 +27,7 @@
         <a class="logo" href="#" aria-label="Inicio - El Solazo de Hermosillo">
         <img src="new logo.jpg" alt="Logo de mi sitio web" width="100" height="50">
           </div>
+          
         </a>
       </div>
 
@@ -35,11 +39,10 @@
           <li><button class="nav-link" data-cat="seguridad">SEGURIDAD Y JUSTICIA 🚨</button></li>
           <li class="has-sub">
             <button class="nav-link" data-cat="sociedad">SOCIEDAD Y VIRAL 💬</button>
-            <div class="subtext">Hermosillo · Nogales · Magdalena · Obregón · Otras</div>
           </li>
           <li><button class="nav-link" data-cat="cultura">CULTURA, CIENCIA Y ENTRETENIMIENTO 💡</button></li>
           <li><a class="nav-link" href="/en-vivo" id="en-vivo-link">En vivo</a></li>
-          <li><a class="nav-link" href="clima.html" id="clima-link">Clima</a></li>
+          <li><a class="nav-link" href="/clima.html" id="clima-link">Clima</a></li>
           <li><button id="favorites-view" class="nav-link">Favoritos ★</button></li>
         </ul>
       </nav>
@@ -148,6 +151,13 @@
     </div>
   </footer>
 
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="./app.js">
+        // ☀️ Movimiento del sol con el scroll
+    window.addEventListener("scroll", () => {
+      const scrollY = window.scrollY;
+      sun.style.transform = `translate(-50%, ${scrollY * 0.3}px)`;
+    });
+
+  </script>
 </body>
 </html>
