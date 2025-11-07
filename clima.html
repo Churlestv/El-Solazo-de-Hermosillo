@@ -1,9 +1,13 @@
+<!doctype html>
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>El Solazo de Hermosillo</title>
-  <link rel="icon" href="new logo.jpg" />
-    
+  <link rel="icon" type="image/png" href="new logo.jpg" />
+
+  <!-- ✅ Fuente Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -31,24 +35,22 @@
       background: var(--bg);
       color: var(--text);
       margin: 0;
-      min-height: 100vh;
       overflow-x: hidden;
       transition: background 0.3s, color 0.3s;
     }
 
-    /* 🌞 Sol dinámico */
+    /* ☀️ Sol dinámico */
     .sun-bg {
       position: fixed;
-      top: 80px;
+      top: 100px;
       left: 50%;
       transform: translateX(-50%);
       width: 400px;
       height: 400px;
       background: radial-gradient(circle, #ffe57f 40%, transparent 70%);
       border-radius: 50%;
-      filter: blur(10px);
-      z-index: 0;
-      transition: transform 0.3s ease-out, background 1s ease-in-out;
+      filter: blur(20px);
+      z-index: -1 !important;
       pointer-events: none;
     }
 
@@ -60,22 +62,11 @@
       color: white;
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
       gap: 1rem;
       padding: 0.8rem;
       font-weight: 500;
       box-shadow: 0 2px 10px var(--shadow);
       z-index: 100;
-    }
-
-    nav span {
-      cursor: pointer;
-      transition: transform 0.2s ease, opacity 0.2s ease;
-    }
-
-    nav span:hover {
-      opacity: 0.9;
-      transform: scale(1.05);
     }
 
     header {
@@ -84,19 +75,14 @@
       font-weight: 700;
       color: var(--accent);
       text-align: center;
-      z-index: 10;
-      position: relative;
     }
 
     .container {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.2rem;
+      gap: 1rem;
       padding: 1rem;
-      margin-bottom: 2rem;
-      position: relative;
-      z-index: 10;
     }
 
     .controls {
@@ -107,17 +93,16 @@
       gap: 0.8rem;
     }
 
-    input {
-      padding: 0.9rem;
+    input, button {
       border-radius: 12px;
-      border: 1px solid #ccc;
+      padding: 0.9rem;
       font-size: 1rem;
-      width: 100%;
-      box-sizing: border-box;
-      transition: border 0.3s, box-shadow 0.3s;
-      backdrop-filter: blur(4px);
     }
 
+    input {
+      border: 1px solid #ccc;
+      transition: 0.3s;
+    }
     input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--accent-light);
@@ -128,32 +113,28 @@
       background: var(--accent);
       border: none;
       color: #fff;
-      font-size: 1rem;
-      padding: 0.8rem;
-      border-radius: 12px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
+      transition: 0.3s;
     }
-
     button:hover {
       background: var(--accent-light);
       transform: translateY(-2px);
     }
 
+    /* ✅ Tarjeta clima */
     .weather-card {
+      display: none;
       background: var(--card);
       backdrop-filter: blur(12px);
       border-radius: 20px;
       padding: 2rem;
       width: 90%;
       max-width: 420px;
+      text-align: center;
       box-shadow: 0 6px 20px var(--shadow);
-      display: none;
       animation: fadeIn 0.4s ease;
-      position: relative;
-      z-index: 5;
     }
-
     .weather-card.visible {
       display: block;
     }
@@ -166,178 +147,199 @@
     .weather-icon {
       width: 100px;
       height: 100px;
-      animation: float 3s ease-in-out infinite;
+      animation: float 3s infinite ease-in-out;
     }
 
     @keyframes float {
-      0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-8px); }
     }
 
-    h2 {
-      margin: 0.3rem 0;
-      color: var(--accent);
+    /* ✅ Loader */
+    #loader {
+      display: none;
+      margin-top: 2rem;
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid var(--accent);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ✅ Historial */
+    .recent {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      opacity: 0.8;
+      text-align: center;
     }
 
-    h3 {
-      margin: 0.2rem 0 1rem 0;
-      text-transform: capitalize;
+    /* ✅ Botón inicio flotante */
+    .icon-btn {
+      position: fixed;
+      bottom: 22px;
+      right: 22px;
+      background: var(--accent);
+      padding: .6rem .8rem;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 28px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px var(--shadow);
+      transition: .3s;
+      z-index: 200;
     }
-
-    p {
-      margin: 0.3rem 0;
-      font-size: 0.95rem;
+    .icon-btn:hover {
+      background: var(--accent-light);
+      transform: translateY(-3px);
     }
 
     footer {
       text-align: center;
-      margin-top: 3rem;
-      font-size: 0.9rem;
+      margin: 3rem 0 1rem;
       opacity: 0.7;
-      position: relative;
-      z-index: 10;
     }
   </style>
 </head>
 <body>
-  <!-- ☀️ Sol de fondo -->
-  <div class="sun-bg" id="sun"></div>
 
-  <!-- 🌆 Barra fija -->
-  <nav>
-    <span data-ciudad="Hermosillo">Hermosillo</span>
-    <span data-ciudad="Obregón">Obregón</span>
-    <span data-ciudad="Nogales">Nogales</span>
-    <span data-ciudad="San Luis Potosí">San Luis P</span>
-    <span data-ciudad="Guaymas">Guaymas</span>
-    <span data-ciudad="Caborca">Caborca</span>
-  </nav>
+<div class="sun-bg" id="sun"></div>
 
-  <header>El Solazo de Hermosillo</header>
+<nav>
+  <span data-ciudad="Hermosillo">Hermosillo</span>
+  <span data-ciudad="Ciudad Obregón">Obregón</span>
+  <span data-ciudad="Nogales">Nogales</span>
+  <span data-ciudad="San Luis Potosí">San Luis P</span>
+  <span data-ciudad="Guaymas">Guaymas</span>
+  <span data-ciudad="Caborca">Caborca</span>
+</nav>
 
-  <div class="container">
-    <div class="controls">
-      <button id="btnUbicacion">📍 Detectar mi ubicación</button>
-      <input id="busqueda" type="text" placeholder="🔍 Buscar clima en cualquier ciudad del mundo..." />
-    </div>
+<header>El Solazo de Hermosillo</header>
 
-    <div id="clima" class="weather-card">
-      <h2 id="ciudad"></h2>
-      <img id="icono" class="weather-icon" alt="icono del clima">
-      <h3 id="descripcion"></h3>
-      <p><strong>🌡️ Temperatura:</strong> <span id="temp"></span> °C</p>
-      <p><strong>💧 Humedad:</strong> <span id="humedad"></span>%</p>
-      <p><strong>💨 Viento:</strong> <span id="viento"></span> km/h</p>
-      <p><strong>🌅 Amanecer:</strong> <span id="amanecer"></span></p>
-      <p><strong>🌇 Atardecer:</strong> <span id="atardecer"></span></p>
-    </div>
+<div class="container">
+  <div class="controls">
+    <button id="btnUbicacion">📍 Detectar mi ubicación</button>
+    <input id="busqueda" type="text" placeholder="Ve el clima en cualquier ciudad..." />
   </div>
-  
-  <!-- ✅ Botón para regresar -->
- <a href="index.html" 
- class="icon-btn"
- style="font-size: 25px;"
->🏠</a>
 
-  <footer>Hecho con ☀️ desde Hermosillo</footer>
+  <div id="loader"></div>
 
-  <script>
-    const apiKey = "d3999aed11a18dd42aa39605670eb42f";
-    const btnUbicacion = document.getElementById("btnUbicacion");
-    const busqueda = document.getElementById("busqueda");
-    const card = document.getElementById("clima");
-    const navItems = document.querySelectorAll("nav span");
-    const sun = document.getElementById("sun");
+  <div id="clima" class="weather-card">
+    <h2 id="ciudad"></h2>
+    <img id="icono" class="weather-icon">
+    <h3 id="descripcion"></h3>
+    <p><strong>🌡️ Temp:</strong> <span id="temp"></span> °C</p>
+    <p><strong>💧 Humedad:</strong> <span id="humedad"></span>%</p>
+    <p><strong>💨 Viento:</strong> <span id="viento"></span> km/h</p>
+    <p><strong>🌅 Amanecer:</strong> <span id="amanecer"></span></p>
+    <p><strong>🌇 Atardecer:</strong> <span id="atardecer"></span></p>
+  </div>
 
-    // ☀️ Movimiento del sol con el scroll
-    window.addEventListener("scroll", () => {
-      const scrollY = window.scrollY;
-      sun.style.transform = `translate(-50%, ${scrollY * 0.3}px)`;
-    });
+  <div class="recent" id="recientes"></div>
+</div>
 
-    // 🌈 Cambio de color del sol según hora local
-    function actualizarColorSol() {
-      const hora = new Date().getHours();
-      if (hora >= 6 && hora < 12) {
-        sun.style.background = "radial-gradient(circle, #fff176 40%, transparent 70%)"; // mañana
-      } else if (hora >= 12 && hora < 18) {
-        sun.style.background = "radial-gradient(circle, #ffeb3b 40%, transparent 70%)"; // mediodía
-      } else if (hora >= 18 && hora < 20) {
-        sun.style.background = "radial-gradient(circle, #ff9800 40%, transparent 70%)"; // atardecer
-      } else {
-        sun.style.background = "radial-gradient(circle, #90caf9 30%, transparent 70%)"; // noche
-      }
-    }
-    actualizarColorSol();
-    setInterval(actualizarColorSol, 60000);
+<a href="index.html" class="icon-btn">🏠</a>
 
-    // 🔎 Buscar ciudad con Enter
-    busqueda.addEventListener("keypress", (e) => {
-      if (e.key === "Enter" && busqueda.value.trim() !== "") {
-        mostrarClimaPorCiudad(busqueda.value.trim());
-      }
-    });
+<footer>Hecho con ☀️ desde Hermosillo</footer>
 
-    // 📍 Detectar ubicación
-    btnUbicacion.addEventListener("click", () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(mostrarClimaPorUbicacion, errorUbicacion);
-      } else {
-        alert("Tu navegador no soporta geolocalización.");
-      }
-    });
+<script>
+const apiKey = "d3999aed11a18dd42aa39605670eb42f";
+const loader = document.getElementById("loader");
+const card = document.getElementById("clima");
+const recientesBox = document.getElementById("recientes");
 
-    // 🌆 Barra superior con municipios
-    navItems.forEach(item => {
-      item.addEventListener("click", () => {
-        mostrarClimaPorCiudad(item.dataset.ciudad);
-      });
-    });
+/* ✅ Animación del sol */
+window.addEventListener("scroll", () => {
+  document.getElementById("sun").style.transform =
+    `translate(-50%, ${window.scrollY * 0.3}px)`;
+});
 
-    async function mostrarClimaPorUbicacion(pos) {
-      const lat = pos.coords.latitude;
-      const lon = pos.coords.longitude;
-      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric&lang=es`;
-      obtenerYMostrarClima(url);
-    }
+/* ✅ Buscar con Enter */
+busqueda.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") buscarCiudad(busqueda.value);
+});
 
-    async function mostrarClimaPorCiudad(ciudad) {
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${ciudad}&appid=${apiKey}&units=metric&lang=es`;
-      obtenerYMostrarClima(url);
-    }
+/* ✅ Municipios */
+document.querySelectorAll("nav span").forEach(el => {
+  el.addEventListener("click", () => buscarCiudad(el.dataset.ciudad));
+});
 
-    async function obtenerYMostrarClima(url) {
-      try {
-        const res = await fetch(url);
-        const datos = await res.json();
+/* 📍 Ubicación */
+btnUbicacion.addEventListener("click", () => {
+  navigator.geolocation?.getCurrentPosition(
+    p => obtenerClima(`lat=${p.coords.latitude}&lon=${p.coords.longitude}`),
+    () => alertError("No se pudo obtener tu ubicación")
+  );
+});
 
-        if (datos.cod !== 200) {
-          alert("No se encontró la ciudad.");
-          return;
-        }
+/* ✅ Mostrar clima */
+async function obtenerClima(param) {
+  loader.style.display = "block";
+  card.classList.remove("visible");
 
-        document.getElementById("ciudad").textContent = datos.name;
-        document.getElementById("descripcion").textContent = datos.weather[0].description;
-        document.getElementById("temp").textContent = Math.round(datos.main.temp);
-        document.getElementById("humedad").textContent = datos.main.humidity;
-        document.getElementById("viento").textContent = (datos.wind.speed * 3.6).toFixed(1);
-        document.getElementById("icono").src = `https://openweathermap.org/img/wn/${datos.weather[0].icon}@2x.png`;
+  try {
+    const res = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?${param}&appid=${apiKey}&units=metric&lang=es`
+    );
+    const d = await res.json();
 
-        const amanecer = new Date(datos.sys.sunrise * 1000);
-        const atardecer = new Date(datos.sys.sunset * 1000);
-        document.getElementById("amanecer").textContent = amanecer.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-        document.getElementById("atardecer").textContent = atardecer.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    if (d.cod !== 200) return alertError("Ciudad no encontrada");
 
-        card.classList.add("visible");
-      } catch (err) {
-        alert("Error al obtener los datos del clima.");
-        console.error(err);
-      }
-    }
+    card.classList.add("visible");
+    loader.style.display = "none";
 
-    function errorUbicacion() {
-      alert("No se pudo obtener tu ubicación. Revisa permisos o GPS.");
-    }
-  </script>
+    ciudad.textContent = d.name;
+    descripcion.textContent = d.weather[0].description;
+    temp.textContent = Math.round(d.main.temp);
+    humedad.textContent = d.main.humidity;
+    viento.textContent = (d.wind.speed * 3.6).toFixed(1);
+    icono.src = `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`;
+
+    amanecer.textContent = new Date(d.sys.sunrise * 1000)
+      .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    atardecer.textContent = new Date(d.sys.sunset * 1000)
+      .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    guardarReciente(d.name);
+
+  } catch {
+    alertError("Error al obtener datos del clima");
+  }
+}
+
+function buscarCiudad(c) {
+  if (!c.trim()) return;
+  obtenerClima(`q=${c.trim()}`);
+}
+
+/* ✅ Historial almacenamiento */
+function guardarReciente(nombre) {
+  let hist = JSON.parse(localStorage.getItem("recientes")) || [];
+  if (!hist.includes(nombre)) {
+    hist.unshift(nombre);
+    if (hist.length > 4) hist.pop();
+    localStorage.setItem("recientes", JSON.stringify(hist));
+  }
+  mostrarRecientes();
+}
+
+function mostrarRecientes() {
+  let hist = JSON.parse(localStorage.getItem("recientes")) || [];
+  if (!hist.length) return recientesBox.innerHTML = "";
+  recientesBox.innerHTML = "📌 Recientes: " + hist.map(c =>
+    `<span style='cursor:pointer;color:var(--accent);font-weight:500;' onclick='buscarCiudad("${c}")'>${c}</span>`
+  ).join(" · ");
+}
+mostrarRecientes();
+
+/* ❌ Mensajes de error */
+function alertError(msg) {
+  loader.style.display = "none";
+  card.classList.remove("visible");
+  recientesBox.innerHTML = `<span style='color:red;'>${msg}</span>`;
+}
+</script>
+
 </body>
 </html>
