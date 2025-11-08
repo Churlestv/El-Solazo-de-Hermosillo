@@ -4,9 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>El Solazo de Hermosillo</title>
-  <link rel="icon" type="image/png" href="new logo.jpg" />
+  <link rel="icon" type="image/png" href="new logo.png" />
 
-  <!-- ✅ Fuente Poppins -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -15,8 +14,8 @@
       --accent-light: #ffd54f;
       --bg: #fffdf7;
       --text: #333;
-      --card: rgba(255, 255, 255, 0.65);
-      --shadow: rgba(0, 0, 0, 0.15);
+      --card: rgba(255,255,255,0.65);
+      --shadow: rgba(0,0,0,0.15);
     }
 
     @media (prefers-color-scheme: dark) {
@@ -25,32 +24,32 @@
         --accent-light: #ffe082;
         --bg: #1f1f1f;
         --text: #f5f5f5;
-        --card: rgba(40, 40, 40, 0.65);
-        --shadow: rgba(255, 255, 255, 0.05);
+        --card: rgba(40,40,40,0.65);
+        --shadow: rgba(255,255,255,0.05);
       }
     }
 
     body {
+      position: relative; /* ✅ sol ya no se sobrepone */
       font-family: "Poppins", sans-serif;
       background: var(--bg);
       color: var(--text);
       margin: 0;
       overflow-x: hidden;
-      transition: background 0.3s, color 0.3s;
+      transition: background .3s, color .3s;
     }
 
-    /* ☀️ Sol dinámico */
     .sun-bg {
       position: fixed;
-      top: 100px;
+      top: 160px;
       left: 50%;
       transform: translateX(-50%);
-      width: 400px;
-      height: 400px;
-      background: radial-gradient(circle, #ffe57f 40%, transparent 70%);
+      width: 520px;
+      height: 520px;
+      background: radial-gradient(circle, #ffe57f 35%, transparent 70%);
+      filter: blur(35px);
       border-radius: 50%;
-      filter: blur(20px);
-      z-index: -1 !important;
+      z-index: -1;
       pointer-events: none;
     }
 
@@ -59,19 +58,20 @@
       top: 0;
       width: 100%;
       background: var(--accent);
-      color: white;
+      color: #fff;
       display: flex;
       justify-content: center;
       gap: 1rem;
-      padding: 0.8rem;
+      padding: .8rem;
       font-weight: 500;
       box-shadow: 0 2px 10px var(--shadow);
       z-index: 100;
+      cursor: pointer;
     }
 
     header {
-      margin-top: 4.5rem;
-      font-size: 1.8rem;
+      margin-top: 4.8rem;
+      font-size: 2rem;
       font-weight: 700;
       color: var(--accent);
       text-align: center;
@@ -90,19 +90,19 @@
       max-width: 400px;
       display: flex;
       flex-direction: column;
-      gap: 0.8rem;
+      gap: .8rem;
     }
 
     input, button {
       border-radius: 12px;
-      padding: 0.9rem;
+      padding: .9rem;
       font-size: 1rem;
     }
 
     input {
       border: 1px solid #ccc;
-      transition: 0.3s;
     }
+
     input:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px var(--accent-light);
@@ -115,14 +115,14 @@
       color: #fff;
       font-weight: 600;
       cursor: pointer;
-      transition: 0.3s;
+      transition: .3s;
     }
+
     button:hover {
       background: var(--accent-light);
       transform: translateY(-2px);
     }
 
-    /* ✅ Tarjeta clima */
     .weather-card {
       display: none;
       background: var(--card);
@@ -133,14 +133,15 @@
       max-width: 420px;
       text-align: center;
       box-shadow: 0 6px 20px var(--shadow);
-      animation: fadeIn 0.4s ease;
+      animation: fadeIn .4s ease;
     }
+
     .weather-card.visible {
       display: block;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.97); }
+      from { opacity: 0; transform: scale(.97); }
       to { opacity: 1; transform: scale(1); }
     }
 
@@ -154,28 +155,25 @@
       50% { transform: translateY(-8px); }
     }
 
-    /* ✅ Loader */
     #loader {
       display: none;
       margin-top: 2rem;
-      border: 6px solid #f3f3f3;
-      border-top: 6px solid var(--accent);
-      border-radius: 50%;
       width: 50px;
       height: 50px;
+      border: 6px solid #eee;
+      border-top: 6px solid var(--accent);
+      border-radius: 50%;
       animation: spin 1s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ✅ Historial */
     .recent {
       margin-top: 1rem;
-      font-size: 0.85rem;
-      opacity: 0.8;
+      font-size: .9rem;
+      opacity: .9;
       text-align: center;
     }
 
-    /* ✅ Botón inicio flotante */
     .icon-btn {
       position: fixed;
       bottom: 22px;
@@ -186,19 +184,14 @@
       color: #fff;
       font-size: 28px;
       text-decoration: none;
-      box-shadow: 0 4px 12px var(--shadow);
       transition: .3s;
       z-index: 200;
-    }
-    .icon-btn:hover {
-      background: var(--accent-light);
-      transform: translateY(-3px);
     }
 
     footer {
       text-align: center;
       margin: 3rem 0 1rem;
-      opacity: 0.7;
+      opacity: .7;
     }
   </style>
 </head>
@@ -210,7 +203,7 @@
   <span data-ciudad="Hermosillo">Hermosillo</span>
   <span data-ciudad="Ciudad Obregón">Obregón</span>
   <span data-ciudad="Nogales">Nogales</span>
-  <span data-ciudad="San Luis Potosí">San Luis P</span>
+  <span data-ciudad="San Luis Río Colorado">SLRC</span>
   <span data-ciudad="Guaymas">Guaymas</span>
   <span data-ciudad="Caborca">Caborca</span>
 </nav>
@@ -220,23 +213,23 @@
 <div class="container">
   <div class="controls">
     <button id="btnUbicacion">📍 Detectar mi ubicación</button>
-    <input id="busqueda" type="text" placeholder="Ve el clima en cualquier ciudad..." />
+    <input id="busqueda" type="text" placeholder="Clima en cualquier ciudad..." />
   </div>
 
   <div id="loader"></div>
 
   <div id="clima" class="weather-card">
     <h2 id="ciudad"></h2>
-    <img id="icono" class="weather-icon">
+    <img id="icono" class="weather-icon" alt="Icono del clima">
     <h3 id="descripcion"></h3>
-    <p><strong>🌡️ Temp:</strong> <span id="temp"></span> °C</p>
+    <p><strong>🌡 Temp:</strong> <span id="temp"></span> °C</p>
     <p><strong>💧 Humedad:</strong> <span id="humedad"></span>%</p>
     <p><strong>💨 Viento:</strong> <span id="viento"></span> km/h</p>
     <p><strong>🌅 Amanecer:</strong> <span id="amanecer"></span></p>
     <p><strong>🌇 Atardecer:</strong> <span id="atardecer"></span></p>
   </div>
 
-  <div class="recent" id="recientes"></div>
+  <div id="recientes" class="recent"></div>
 </div>
 
 <a href="index.html" class="icon-btn">🏠</a>
@@ -245,101 +238,117 @@
 
 <script>
 const apiKey = "d3999aed11a18dd42aa39605670eb42f";
-const loader = document.getElementById("loader");
-const card = document.getElementById("clima");
-const recientesBox = document.getElementById("recientes");
 
-/* ✅ Animación del sol */
+// animación sol scroll
 window.addEventListener("scroll", () => {
   document.getElementById("sun").style.transform =
-    `translate(-50%, ${window.scrollY * 0.3}px)`;
+    `translate(-50%, ${window.scrollY * 0.25}px)`;
 });
 
-/* ✅ Buscar con Enter */
-busqueda.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") buscarCiudad(busqueda.value);
+// enter search
+document.getElementById("busqueda").addEventListener("keydown", e => {
+  if (e.key === "Enter") buscarCiudad(e.target.value);
 });
 
-/* ✅ Municipios */
-document.querySelectorAll("nav span").forEach(el => {
-  el.addEventListener("click", () => buscarCiudad(el.dataset.ciudad));
-});
+// nav click cities
+document.querySelectorAll("nav span").forEach(e =>
+  e.addEventListener("click", () => buscarCiudad(e.dataset.ciudad))
+);
 
-/* 📍 Ubicación */
-btnUbicacion.addEventListener("click", () => {
-  navigator.geolocation?.getCurrentPosition(
+// ubicación con fallback
+document.getElementById("btnUbicacion").addEventListener("click", () => {
+  if (!navigator.geolocation)
+    return buscarPorIP();
+
+  navigator.geolocation.getCurrentPosition(
     p => obtenerClima(`lat=${p.coords.latitude}&lon=${p.coords.longitude}`),
-    () => alertError("No se pudo obtener tu ubicación")
+    () => buscarPorIP()
   );
 });
 
-/* ✅ Mostrar clima */
-async function obtenerClima(param) {
-  loader.style.display = "block";
-  card.classList.remove("visible");
+// fallback ip
+async function buscarPorIP() {
+  try {
+    const r = await fetch("https://ipapi.co/json/");
+    const d = await r.json();
+    buscarCiudad(d.city || "Hermosillo");
+  } catch {
+    alertError("No se pudo detectar ubicación");
+  }
+}
+
+// fetch clima
+async function obtenerClima(params) {
+  mostrarLoader(true);
 
   try {
-    const res = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?${param}&appid=${apiKey}&units=metric&lang=es`
-    );
-    const d = await res.json();
+    const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?${params}&appid=${apiKey}&units=metric&lang=es`);
+    const d = await r.json();
 
     if (d.cod !== 200) return alertError("Ciudad no encontrada");
 
-    card.classList.add("visible");
-    loader.style.display = "none";
-
-    ciudad.textContent = d.name;
-    descripcion.textContent = d.weather[0].description;
-    temp.textContent = Math.round(d.main.temp);
-    humedad.textContent = d.main.humidity;
-    viento.textContent = (d.wind.speed * 3.6).toFixed(1);
-    icono.src = `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`;
-
-    amanecer.textContent = new Date(d.sys.sunrise * 1000)
-      .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    atardecer.textContent = new Date(d.sys.sunset * 1000)
-      .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
+    renderClima(d);
     guardarReciente(d.name);
 
   } catch {
-    alertError("Error al obtener datos del clima");
+    alertError("Error al obtener datos");
   }
 }
 
+// render clima
+function renderClima(d) {
+  document.getElementById("ciudad").textContent = d.name;
+  document.getElementById("descripcion").textContent = d.weather[0].description;
+  document.getElementById("temp").textContent = Math.round(d.main.temp);
+  document.getElementById("humedad").textContent = d.main.humidity;
+  document.getElementById("viento").textContent = (d.wind.speed * 3.6).toFixed(1);
+  document.getElementById("icono").src = `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`;
+  document.getElementById("amanecer").textContent = formatoHora(d.sys.sunrise);
+  document.getElementById("atardecer").textContent = formatoHora(d.sys.sunset);
+
+  mostrarLoader(false);
+  document.getElementById("clima").classList.add("visible");
+}
+
+function formatoHora(t) {
+  return new Date(t * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+// busqueda texto
 function buscarCiudad(c) {
-  if (!c.trim()) return;
-  obtenerClima(`q=${c.trim()}`);
+  c = c.trim();
+  if (!c) return;
+  obtenerClima(`q=${c}`);
 }
 
-/* ✅ Historial almacenamiento */
-function guardarReciente(nombre) {
-  let hist = JSON.parse(localStorage.getItem("recientes")) || [];
-  if (!hist.includes(nombre)) {
-    hist.unshift(nombre);
-    if (hist.length > 4) hist.pop();
-    localStorage.setItem("recientes", JSON.stringify(hist));
-  }
+// historial
+function guardarReciente(n) {
+  let h = JSON.parse(localStorage.getItem("recientes")) || [];
+  h = [n, ...h.filter(x => x !== n)].slice(0, 5);
+  localStorage.setItem("recientes", JSON.stringify(h));
   mostrarRecientes();
 }
 
 function mostrarRecientes() {
-  let hist = JSON.parse(localStorage.getItem("recientes")) || [];
-  if (!hist.length) return recientesBox.innerHTML = "";
-  recientesBox.innerHTML = "📌 Recientes: " + hist.map(c =>
-    `<span style='cursor:pointer;color:var(--accent);font-weight:500;' onclick='buscarCiudad("${c}")'>${c}</span>`
-  ).join(" · ");
+  let h = JSON.parse(localStorage.getItem("recientes")) || [];
+  document.getElementById("recientes").innerHTML =
+    h.length ? `📌 Recientes: ${h.map(c =>
+      `<span style='cursor:pointer;color:var(--accent);font-weight:600' onclick='buscarCiudad("${c}")'>${c}</span>`
+    ).join(" · ")}` : "";
 }
 mostrarRecientes();
 
-/* ❌ Mensajes de error */
+// errores
 function alertError(msg) {
-  loader.style.display = "none";
-  card.classList.remove("visible");
-  recientesBox.innerHTML = `<span style='color:red;'>${msg}</span>`;
+  mostrarLoader(false);
+  document.getElementById("clima").classList.remove("visible");
+  document.getElementById("recientes").innerHTML =
+    `<span style="color:red">${msg}</span>`;
+}
+
+function mostrarLoader(s) {
+  document.getElementById("loader").style.display = s ? "block" : "none";
 }
 </script>
-
 </body>
 </html>
