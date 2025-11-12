@@ -2,51 +2,63 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>El Solazo de Hermosillo</title>
 
-  <link rel="icon" href="New Logo.png" />
+  <!-- 🔆 Descripción SEO -->
+  <meta name="description" content="El sol de la noticia — información clara y directa desde Sonora. Noticias locales, estatales y nacionales con mirada periodística.">
 
-  <!-- ⚠️ Prerender solo funciona con URLs válidas en producción -->
-  <!-- <link rel="prerender" href="/en-vivo"> -->
-  <!-- <link rel="prerender" href="/clima"> -->
+  <!-- 🎨 Favicon -->
+  <link rel="icon" type="image/png" href="New Logo.png" />
 
-  <link rel="preload" href="./style.css" as="style">
+  <!-- 🔮 Prerender / Preload -->
+  <link rel="prerender" href="./en-vivo.html" />
+  <link rel="prerender" href="./clima.html" />
+  <link rel="preload" href="./style.css" as="style" />
 
-  <meta name="theme-color" content="#fff" id="meta-theme-color">
-  <link rel="stylesheet" href="./style.css">
+  <!-- 🎭 Tema del navegador -->
+  <meta name="theme-color" content="#fff" id="meta-theme-color" />
+
+  <!-- 💅 Estilos -->
+  <link rel="stylesheet" href="./style.css" />
+
+  <!-- 📱 Meta Open Graph (para redes sociales) -->
+  <meta property="og:title" content="El Solazo de Hermosillo">
+  <meta property="og:description" content="El sol de la noticia — información clara y directa desde Sonora.">
+  <meta property="og:image" content="./assets/logo.png">
+  <meta property="og:type" content="website">
 </head>
 
 <body>
-  <!-- ☀️ Sol de fondo -->
+  <!-- ☀️ Fondo animado -->
   <div class="sun-bg" id="sun"></div>
 
+  <!-- 🌞 Encabezado -->
   <header class="site-header">
     <div class="container header-inner">
-
       <div class="brand">
         <button id="menu-toggle" aria-label="Abrir menú" class="icon-btn">☰</button>
         <a class="logo" href="#" aria-label="Inicio - El Solazo de Hermosillo">
-          <img src="New Logo.png" alt="Logo de mi sitio web" width="100" height="50">
+          <img src="./assets/logo.png" alt="Logo de El Solazo de Hermosillo" width="100" height="50">
         </a>
       </div>
 
+      <!-- 🔗 Menú principal -->
       <nav class="main-nav" id="main-nav" aria-label="Menú principal">
         <ul>
           <li><button class="nav-link" data-cat="todos">Inicio</button></li>
           <li><button class="nav-link" data-cat="mundo">MUNDO Y NACIONAL 🌍</button></li>
           <li><button class="nav-link" data-cat="sonora">SONORA HOY 🌵</button></li>
           <li><button class="nav-link" data-cat="seguridad">SEGURIDAD Y JUSTICIA 🚨</button></li>
-          <li class="has-sub">
-            <button class="nav-link" data-cat="sociedad">SOCIEDAD Y VIRAL 💬</button>
-          </li>
+          <li><button class="nav-link" data-cat="sociedad">SOCIEDAD Y VIRAL 💬</button></li>
           <li><button class="nav-link" data-cat="cultura">CULTURA, CIENCIA Y ENTRETENIMIENTO 💡</button></li>
-          <li><a class="nav-link" href="/en-vivo" id="en-vivo-link">En vivo</a></li>
-          <li><a class="nav-link" href="/clima.html" id="clima-link">Clima</a></li>
+          <li><a class="nav-link" href="./en-vivo.html" id="en-vivo-link">En vivo</a></li>
+          <li><a class="nav-link" href="./clima.html" id="clima-link">Clima</a></li>
           <li><button id="favorites-view" class="nav-link">Favoritos ★</button></li>
         </ul>
       </nav>
 
+      <!-- ⚙️ Acciones del header -->
       <div class="header-actions">
         <button id="toggle-theme" class="icon-btn" title="Modo oscuro">🌙</button>
         <button id="notify-perm" class="icon-btn" title="Activar notificaciones">🔔</button>
@@ -55,6 +67,7 @@
     </div>
   </header>
 
+  <!-- 📰 Contenido principal -->
   <main class="container">
     <section class="hero">
       <div class="hero-inner">
@@ -74,7 +87,7 @@
         <button id="search-btn" class="icon-btn">🔎</button>
       </div>
       <div class="filters">
-        <label>Ordenar:</label>
+        <label for="sort">Ordenar:</label>
         <select id="sort">
           <option value="new">Más recientes</option>
           <option value="old">Más antiguas</option>
@@ -91,7 +104,7 @@
     </div>
   </main>
 
-  <!-- Modal: Login -->
+  <!-- 🔐 Modal: Inicio de sesión -->
   <div id="login-modal" class="modal" aria-hidden="true">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="login-title">
       <button class="modal-close" id="close-login" aria-label="Cerrar">✕</button>
@@ -114,7 +127,7 @@
     </div>
   </div>
 
-  <!-- Template -->
+  <!-- 🧩 Plantilla de artículo -->
   <template id="tpl-article">
     <article class="card">
       <div class="card-media">
@@ -136,6 +149,7 @@
     </article>
   </template>
 
+  <!-- ⚓ Footer -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-cols">
@@ -151,17 +165,18 @@
     </div>
   </footer>
 
-  <!-- Script principal -->
+  <!-- 📜 Scripts -->
   <script type="module" src="./app.js"></script>
-
-  <!-- Movimiento del sol con scroll -->
   <script>
+    // ☀️ Movimiento del sol con el scroll
+    const sun = document.getElementById("sun");
     window.addEventListener("scroll", () => {
       const scrollY = window.scrollY;
-      const sun = document.getElementById("sun");
       sun.style.transform = `translate(-50%, ${scrollY * 0.3}px)`;
     });
-  </script>
 
+    // 📅 Año automático en el footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
-</html>   
+</html>
