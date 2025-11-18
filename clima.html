@@ -182,21 +182,15 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    .recent {
-      margin-top: 1rem;
-      font-size: 0.85rem;
-      opacity: 0.8;
-      text-align: center;
-    }
-
     footer {
       text-align: center;
       margin: 3rem 0 1rem;
       opacity: 0.7;
     }
+
     /* 🏠 Botón flotante de inicio */
     .home-btn {
-      position:fixed;
+      position: fixed;
       bottom: 20px;
       left: 20px;
       border: none;
@@ -218,6 +212,7 @@
       background: var(--accent-light);
       transform: scale(1.1);
     }
+
     /* 📱 Responsivo */
     @media (max-width: 768px) {
       header { font-size: 1.5rem; }
@@ -261,155 +256,144 @@
   </div>
 
   <div id="forecast"></div>
-
 </div>
 
 <!-- 🏠 Botón flotante -->
 <button class="home-btn" onclick="window.location.href='index.html'" title="Volver al inicio">
-  <p class="icon" type="icon">🏠</p>
+  <span>🏠</span>
 </button>
 
-<footer>Que solazo <i class="lucide lucide-sun"> en Hermosillo</i> </footer>
+<footer>Que solazo <i class="lucide lucide-sun"></i> en Hermosillo</footer>
 
+<!-- ✅ Script Lucide -->
+<script src="https://unpkg.com/lucide@latest"></script>
 <script>
-const apiKey = "d3999aed11a18dd42aa39605670eb42f";
-const loader = document.getElementById("loader");
-const card = document.getElementById("clima");
-const forecastEl = document.getElementById("forecast");
-const sun = document.getElementById("sun");
-
-<!-- Script de Lucide para renderizar íconos -->
-src="https://unpkg.com/lucide@latest">
   lucide.createIcons();
 
-/* 🎨 Tema dinámico según hora */
-function ajustarTemaPorHora() {
-  const h = new Date().getHours();
-  if (h >= 6 && h < 12) {
-    document.body.style.background = "#fff8e1";
-    sun.style.background = "radial-gradient(circle, #ffecb3 40%, transparent 70%)";
-  } else if (h >= 12 && h < 18) {
-    document.body.style.background = "#fff3e0";
-    sun.style.background = "radial-gradient(circle, #ffd54f 40%, transparent 70%)";
-  } else {
-    document.body.style.background = "#1e1e2f";
-    document.body.style.color = "#f1f1f1";
-    sun.style.background = "radial-gradient(circle, #90caf9 20%, transparent 70%)";
+  const apiKey = "d3999aed11a18dd42aa39605670eb42f";
+  const loader = document.getElementById("loader");
+  const card = document.getElementById("clima");
+  const forecastEl = document.getElementById("forecast");
+  const sun = document.getElementById("sun");
+  const btnUbicacion = document.getElementById("btnUbicacion");
+  const busqueda = document.getElementById("busqueda");
+  const ciudad = document.getElementById("ciudad");
+  const descripcion = document.getElementById("descripcion");
+  const temp = document.getElementById("temp");
+  const humedad = document.getElementById("humedad");
+  const viento = document.getElementById("viento");
+  const icono = document.getElementById("icono");
+  const amanecer = document.getElementById("amanecer");
+  const atardecer = document.getElementById("atardecer");
+
+  // 🎨 Tema dinámico según hora
+  function ajustarTemaPorHora() {
+    const h = new Date().getHours();
+    if (h >= 6 && h < 12) {
+      document.body.style.background = "#fff8e1";
+      sun.style.background = "radial-gradient(circle, #ffecb3 40%, transparent 70%)";
+    } else if (h >= 12 && h < 18) {
+      document.body.style.background = "#fff3e0";
+      sun.style.background = "radial-gradient(circle, #ffd54f 40%, transparent 70%)";
+    } else {
+      document.body.style.background = "#1e1e2f";
+      document.body.style.color = "#f1f1f1";
+      sun.style.background = "radial-gradient(circle, #90caf9 20%, transparent 70%)";
+    }
   }
-}
-ajustarTemaPorHora();
+  ajustarTemaPorHora();
 
-/* 📍 Detectar ubicación y mostrar solo ciudad */
-btnUbicacion.addEventListener("click", () => {
-  navigator.geolocation?.getCurrentPosition(async pos => {
-    const { latitude, longitude } = pos.coords;
-    const geo = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${apiKey}`);
-    const [loc] = await geo.json();
-    obtenerClima(`lat=${latitude}&lon=${longitude}`, loc.name);
-  }, () => alertError("No se pudo obtener tu ubicación"));
-});
+  // 📍 Detectar ubicación
+  btnUbicacion.addEventListener("click", () => {
+    navigator.geolocation?.getCurrentPosition(async pos => {
+      const { latitude, longitude } = pos.coords;
+      const geo = await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${latitude}&lon=${longitude}&limit=1&appid=${apiKey}`);
+      const [loc] = await geo.json();
+      obtenerClima(`lat=${latitude}&lon=${longitude}`, loc.name);
+    }, () => alertError("No se pudo obtener tu ubicación"));
+  });
 
-/* 🔍 Buscar ciudad */
-busqueda.addEventListener("keypress", e => e.key === "Enter" && buscarCiudad(busqueda.value));
-document.querySelectorAll("nav span").forEach(el => el.addEventListener("click", () => buscarCiudad(el.dataset.ciudad)));
+  // 🔍 Buscar ciudad
+  busqueda.addEventListener("keypress", e => e.key === "Enter" && buscarCiudad(busqueda.value));
+  document.querySelectorAll("nav span").forEach(el => el.addEventListener("click", () => buscarCiudad(el.dataset.ciudad)));
 
-function buscarCiudad(c) {
-  if (!c.trim()) return;
-  obtenerClima(`q=${c.trim()}`);
-}
+  function buscarCiudad(c) {
+    if (!c.trim()) return;
+    obtenerClima(`q=${c.trim()}`);
+  }
 
-/* ☀️ Mostrar clima y pronóstico */
-async function obtenerClima(param, nameOverride = null) {
-  loader.style.display = "block";
-  card.classList.remove("visible");
-  forecastEl.classList.remove("visible");
+  // ☀️ Obtener clima actual
+  async function obtenerClima(param, nameOverride = null) {
+    loader.style.display = "block";
+    card.classList.remove("visible");
+    forecastEl.classList.remove("visible");
 
-  try {
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?${param}&appid=${apiKey}&units=metric&lang=es`);
-    const d = await res.json();
-    if (d.cod !== 200) throw new Error("Ciudad no encontrada");
+    try {
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?${param}&appid=${apiKey}&units=metric&lang=es`);
+      const d = await res.json();
+      if (d.cod !== 200) throw new Error("Ciudad no encontrada");
 
+      loader.style.display = "none";
+      card.classList.add("visible");
+
+      ciudad.textContent = nameOverride || d.name;
+      descripcion.textContent = d.weather[0].description;
+      temp.textContent = Math.round(d.main.temp);
+      humedad.textContent = d.main.humidity;
+      viento.textContent = (d.wind.speed * 3.6).toFixed(1);
+      icono.src = `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`;
+      amanecer.textContent = new Date(d.sys.sunrise * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      atardecer.textContent = new Date(d.sys.sunset * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+      obtenerPronostico(d.name);
+
+    } catch (err) {
+      alertError(err.message);
+    }
+  }
+
+  // 📆 Pronóstico
+  async function obtenerPronostico(ciudad) {
+    try {
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${ciudad}&appid=${apiKey}&units=metric&lang=es`);
+      const data = await res.json();
+      if (data.cod !== "200") return;
+
+      const daysMap = {};
+      data.list.forEach(item => {
+        const date = new Date(item.dt * 1000).toLocaleDateString("es-MX", { weekday: "short" });
+        if (!daysMap[date]) daysMap[date] = [];
+        daysMap[date].push(item);
+      });
+
+      const keys = Object.keys(daysMap).slice(0, 5);
+      forecastEl.innerHTML = keys.map(k => {
+        const list = daysMap[k];
+        const max = Math.max(...list.map(i => i.main.temp_max));
+        const min = Math.min(...list.map(i => i.main.temp_min));
+        const icon = list[0].weather[0].icon;
+        const desc = list[0].weather[0].description;
+        return `
+          <div class="day">
+            <h4>${k}</h4>
+            <img src="https://openweathermap.org/img/wn/${icon}.png">
+            <p>${desc}</p>
+            <p><strong>${Math.round(max)}° / ${Math.round(min)}°</strong></p>
+          </div>`;
+      }).join("");
+
+      forecastEl.classList.add("visible");
+    } catch {
+      console.log("Error al obtener pronóstico");
+    }
+  }
+
+  function alertError(msg) {
     loader.style.display = "none";
-    card.classList.add("visible");
-
-    ciudad.textContent = nameOverride || d.name;
-    descripcion.textContent = d.weather[0].description;
-    temp.textContent = Math.round(d.main.temp);
-    humedad.textContent = d.main.humidity;
-    viento.textContent = (d.wind.speed * 3.6).toFixed(1);
-    icono.src = `https://openweathermap.org/img/wn/${d.weather[0].icon}@2x.png`;
-    amanecer.textContent = new Date(d.sys.sunrise * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-    atardecer.textContent = new Date(d.sys.sunset * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
-    guardarReciente(d.name);
-    obtenerPronostico(d.name);
-
-  } catch (err) {
-    alertError(err.message);
+    card.classList.remove("visible");
+    forecastEl.classList.remove("visible");
+    alert(msg);
   }
-}
-
-/* 📆 Pronóstico 5 días */
-async function obtenerPronostico(ciudad) {
-  try {
-    const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${ciudad}&appid=${apiKey}&units=metric&lang=es`);
-    const data = await res.json();
-    if (data.cod !== "200") return;
-
-    const daysMap = {};
-    data.list.forEach(item => {
-      const date = new Date(item.dt * 1000).toLocaleDateString("es-MX", { weekday: "short" });
-      if (!daysMap[date]) daysMap[date] = [];
-      daysMap[date].push(item);
-    });
-
-    const keys = Object.keys(daysMap).slice(0, 5);
-    forecastEl.innerHTML = keys.map(k => {
-      const list = daysMap[k];
-      const max = Math.max(...list.map(i => i.main.temp_max));
-      const min = Math.min(...list.map(i => i.main.temp_min));
-      const icon = list[0].weather[0].icon;
-      const desc = list[0].weather[0].description;
-      return `
-        <div class="day">
-          <h4>${k}</h4>
-          <img src="https://openweathermap.org/img/wn/${icon}.png">
-          <p>${desc}</p>
-          <p><strong>${Math.round(max)}° / ${Math.round(min)}°</strong></p>
-        </div>`;
-    }).join("");
-
-    forecastEl.classList.add("visible");
-  } catch {
-    console.log("Error al obtener pronóstico");
-  }
-}
-
-/* 🕐 Historial */
-function guardarReciente(nombre) {
-  let hist = JSON.parse(localStorage.getItem("recientes")) || [];
-  if (!hist.includes(nombre)) {
-    hist.unshift(nombre);
-    if (hist.length > 4) hist.pop();
-    localStorage.setItem("recientes", JSON.stringify(hist));
-  }
-  mostrarRecientes();
-}
-
-function mostrarRecientes() {
-  let hist = JSON.parse(localStorage.getItem("recientes")) || [];
-  recientesBox.innerHTML = hist.length
-    ? "📌 Recientes: " + hist.map(c => `<span style='cursor:pointer;color:var(--accent);font-weight:500;' onclick='buscarCiudad("${c}")'>${c}</span>`).join(" · ")
-    : "";
-}
-mostrarRecientes();
-
-function alertError(msg) {
-  loader.style.display = "none";
-  card.classList.remove("visible");
-  forecastEl.classList.remove("visible");
-  recientesBox.innerHTML = `<span style='color:red;'>${msg}</span>`;
-}
 </script>
 </body>
 </html>
