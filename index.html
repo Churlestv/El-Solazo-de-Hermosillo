@@ -9,10 +9,10 @@
   <meta name="description" content="El sol de la noticia — información clara y directa desde Sonora. Noticias locales, estatales y nacionales con mirada periodística.">
 
   <!-- 🎨 Favicon -->
-  <link rel="icon" type="image/png" href="New Logo.png" />
+  <link rel="icon" type="image/png" href="new-logo.png" />
 
   <!-- 🔮 Prerender / Preload -->
-  <link rel="prerender" href="./en-vivo.html" />
+  <link rel="prerender" href="https://www.facebook.com/ElSolazodeHermosillo/live_videos" />
   <link rel="prerender" href="./clima.html" />
   <link rel="preload" href="./style.css" as="style" />
 
@@ -39,7 +39,7 @@
       <div class="brand">
         <button id="menu-toggle" aria-label="Abrir menú" class="icon-btn">☰</button>
         <a class="logo" href="#" aria-label="Inicio - El Solazo de Hermosillo">
-          <img src="New logo.png" alt="El Solazo de Hermosillo" width="-100" height="50" >
+          <img src="new-logo.png width= 100px height="50" > <p>El Solazo de Hermosillo<p>
         </a>
       </div>
 
@@ -52,7 +52,7 @@
           <li><button class="nav-link" data-cat="seguridad">SEGURIDAD Y JUSTICIA 🚨</button></li>
           <li><button class="nav-link" data-cat="sociedad">SOCIEDAD Y VIRAL 💬</button></li>
           <li><button class="nav-link" data-cat="cultura">CULTURA, CIENCIA Y ENTRETENIMIENTO 💡</button></li>
-          <li><a class="nav-link" href="./en-vivo.html" id="en-vivo-link">En vivo</a></li>
+          <li><a class="nav-link" href="https://www.facebook.com/ElSolazodeHermosillo/live_videos" id="en-vivo-link">En vivo</a></li>
           <li><a class="nav-link" href="./clima.html" id="clima-link">Clima</a></li>
           <li><button id="favorites-view" class="nav-link">Favoritos ★</button></li>
         </ul>
@@ -238,5 +238,20 @@ window.addEventListener("DOMContentLoaded", () => {
     // 📅 Año automático en el footer
     document.getElementById("year").textContent = new Date().getFullYear();
     </script>
+     <!-- 📊 METRICOOL (integrado correctamente) -->
+  <script>
+    function loadScript(a){
+      var b=document.getElementsByTagName("head")[0],
+      c=document.createElement("script");
+      c.type="text/javascript",
+      c.src="https://tracker.metricool.com/resources/be.js",
+      c.onreadystatechange=a,
+      c.onload=a,
+      b.appendChild(c)
+    }
+    loadScript(function(){
+      beTracker.t({hash:"4fa8631b16f189d7de394306d1667aa"})
+    });
+  </script>
   </body>
 </html>

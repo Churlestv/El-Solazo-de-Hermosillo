@@ -1,7 +1,6 @@
 // sw.js - Service Worker optimizado de El Solazo
 
-const CACHE_NAME = 'solazo-v2';
-const OFFLINE_URL = '/offline.html';
+const CACHE_NAME = 'solazo';
 
 // Recursos precargados
 const PRECACHE_ASSETS = [
@@ -9,8 +8,6 @@ const PRECACHE_ASSETS = [
   '/index.html',
   '/style.css',
   '/app.js',
-  '/offline.html',
-  '/assets/placeholder.jpg'
 ];
 
 // ==================== INSTALACIÓN ====================
