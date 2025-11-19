@@ -4,16 +4,20 @@
   --text: #0f1720;
   --muted: #6b6b6b;
   --accent: #d18b2f;
+  /* **Mejora:** Variable para color claro del acento para gradientes */
+  --accent-light: #e8b869; 
   --radius: 12px;
   --shadow: 0 8px 30px rgba(16,16,20,0.06);
 }
 
 *{box-sizing:border-box}
-body{margin:0;font-family:Inter,system-ui,Roboto;background:var(--bg);color:var(--text)}
+/* **Mejora:** Se añade un 'line-height' para mejor legibilidad */
+body{margin:0;font-family:Inter,system-ui,Roboto;background:var(--bg);color:var(--text);line-height:1.5;}
 .container{max-width:1100px;margin:24px auto;padding:0 16px}
 
 .admin-header{
-  background:linear-gradient(90deg,var(--accent),#e8b869);
+  /* **Mejora:** Uso de variables para el gradiente, más fácil de modificar */
+  background:linear-gradient(90deg,var(--accent),var(--accent-light)); 
   box-shadow:0 4px 20px rgba(0,0,0,0.1)
 }
 .header-inner{
@@ -29,7 +33,7 @@ body{margin:0;font-family:Inter,system-ui,Roboto;background:var(--bg);color:var(
 .card h2{margin:0 0 12px;color:var(--accent)}
 
 label{display:block;margin-top:8px;font-weight:600}
-input[type="text"],input[type="url"],textarea{
+input[type="text"],input[type="url"],textarea, input[type="password"]{
   width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-top:6px
 }
 .row{display:flex;gap:10px;margin-top:8px}
@@ -39,11 +43,36 @@ input[type="text"],input[type="url"],textarea{
 .image-preview{width:90px;height:60px;border-radius:6px;object-fit:cover;border:1px solid #ddd}
 
 button{
-  cursor:pointer;border:0;padding:8px 12px;border-radius:8px;font-weight:600
+  cursor:pointer;border:0;padding:8px 12px;border-radius:8px;font-weight:600;
+  /* **Mejora:** Transición para mejor feedback de usuario */
+  transition: background-color 0.2s, opacity 0.2s;
 }
+
 .btn{background:var(--accent);color:#fff}
-.btn-ghost{background:#f5f5f5}
+/* **Mejora:** Estilo más limpio para el botón fantasma */
+.btn-ghost{background:#f5f5f5;color:var(--text);border:1px solid #ddd;} 
 
 .note-row{display:flex;gap:12px;padding:12px 0;border-top:1px solid #eee}
 .note-thumb{width:100px;height:70px;object-fit:cover;border-radius:6px}
-.note-actions{display:flex;gap:8px}
+.note-actions{
+  display:flex;gap:8px;
+  /* **Mejora:** Centrado en la fila */
+  align-items: center; 
+  margin-left: auto;
+}
+.note-meta{
+    /* **Mejora:** Asegurar que el contenido crezca y la imagen no ocupe todo */
+    flex-grow: 1; 
+}
+.note-actions .btn-delete {
+  /* **Mejora:** Creación de un botón de eliminación con clase clara */
+  background: #e74c3c !important; /* Rojo */
+  color: #fff !important;
+}
+
+/* **Nuevo estilo para el botón de mostrar/ocultar contraseña** */
+#toggle-password {
+    padding: 8px;
+    height: 38px;
+    margin-top: 6px;
+}

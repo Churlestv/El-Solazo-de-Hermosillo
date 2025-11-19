@@ -5,45 +5,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>El Solazo de Hermosillo</title>
 
-  <!-- 🔆 Descripción SEO -->
   <meta name="description" content="El sol de la noticia — información clara y directa desde Sonora. Noticias locales, estatales y nacionales con mirada periodística.">
 
-  <!-- 🎨 Favicon -->
-  <link rel="icon" type="image/png" href="new-logo.png" />
+  <link rel="icon" type="image/png" href="new-Logo.png" />
 
-  <!-- 🔮 Prerender / Preload -->
   <link rel="prerender" href="https://www.facebook.com/ElSolazodeHermosillo/live_videos" />
   <link rel="prerender" href="./clima.html" />
-  <link rel="preload" href="./style.css" as="style" />
+  <link rel="preload" href="./style.css" as="style" /> 
 
-  <!-- 🎭 Tema del navegador -->
   <meta name="theme-color" content="#fff" id="meta-theme-color" />
 
-  <!-- 💅 Estilos -->
   <link rel="stylesheet" href="./style.css" />
 
-  <!-- 📱 Meta Open Graph (para redes sociales) -->
   <meta property="og:title" content="El Solazo de Hermosillo">
   <meta property="og:description" content="El sol de la noticia — información clara y directa desde Sonora.">
-  <meta property="og:image" content="./assets/logo.png">
+  <meta property="og:image" content="./new-Logo.png">
   <meta property="og:type" content="website">
 </head>
 
 <body>
-  <!-- ☀️ Fondo animado -->
   <div class="sun-bg" id="sun"></div>
 
-  <!-- 🌞 Encabezado -->
   <header class="site-header">
     <div class="container header-inner">
       <div class="brand">
         <button id="menu-toggle" aria-label="Abrir menú" class="icon-btn">☰</button>
-        <a class="logo" href="#" aria-label="Inicio - El Solazo de Hermosillo">
-          <img src="new-logo.png width= 100px height="50" > <p>El Solazo de Hermosillo<p>
+        <a class="logo" href="/" aria-label="Inicio - El Solazo de Hermosillo">
+          <img src="new-Logo.png" width="100" height="50" alt="Logo El Solazo"> 
+          <p>El Solazo de Hermosillo</p>
         </a>
       </div>
 
-      <!-- 🔗 Menú principal -->
       <nav class="main-nav" id="main-nav" aria-label="Menú principal">
         <ul>
           <li><button class="nav-link" data-cat="todos">Inicio</button></li>
@@ -52,26 +44,23 @@
           <li><button class="nav-link" data-cat="seguridad">SEGURIDAD Y JUSTICIA 🚨</button></li>
           <li><button class="nav-link" data-cat="sociedad">SOCIEDAD Y VIRAL 💬</button></li>
           <li><button class="nav-link" data-cat="cultura">CULTURA, CIENCIA Y ENTRETENIMIENTO 💡</button></li>
-          <li><a class="nav-link" href="https://www.facebook.com/ElSolazodeHermosillo/live_videos" id="en-vivo-link">En vivo</a></li>
+          <li><a class="nav-link" href="https://www.facebook.com/ElSolazodeHermosillo/live_videos" target="_blank" rel="noopener" id="en-vivo-link">En vivo</a></li>
           <li><a class="nav-link" href="./clima.html" id="clima-link">Clima</a></li>
           <li><button id="favorites-view" class="nav-link">Favoritos ★</button></li>
         </ul>
       </nav>
 
-      <!-- ⚙️ Acciones del header -->
       <div class="header-actions">
         <button id="toggle-theme" class="icon-btn" title="Modo oscuro">🌙</button>
         <button id="notify-perm" class="icon-btn" title="Activar notificaciones">🔔</button>
-        <button id="login-btn" class="btn-outline">Iniciar sesión</button>
+        
+        <a href="login.html" class="btn-outline">Iniciar sesión</a>
 
-          <!-- 👑 Solo visible si eres admin -->
-  <a href="./admin.html" id="admin-link" class="btn-outline" hidden>Panel Admin</a>
+        <a href="./admin.html" id="admin-link" class="btn-outline" hidden>Panel Admin</a>
 </div>
-      </div>
     </div>
   </header>
 
-  <!-- 📰 Contenido principal -->
   <main class="container">
     <section class="hero">
       <div class="hero-inner">
@@ -80,7 +69,6 @@
           <p class="lead-sub">Cobertura local, estatal y nacional con mirada periodística y diseño elegante.</p>
         </div>
         <div class="hero-right">
-          <div class="hero-spot">EN VIVO</div>
         </div>
       </div>
     </section>
@@ -88,11 +76,11 @@
     <section class="controls">
       <div class="search-wrap">
         <input id="search" placeholder="Buscar noticia..." aria-label="Buscar noticias" />
-        <button id="search-btn" class="icon-btn">🔎</button>
+        <button id="search-btn" class="icon-btn" aria-label="Buscar"></button>
       </div>
       <div class="filters">
         <label for="sort">Ordenar:</label>
-        <select id="sort">
+        <select id="sort" aria-label="Ordenar noticias por">
           <option value="new">Más recientes</option>
           <option value="old">Más antiguas</option>
         </select>
@@ -104,25 +92,22 @@
     </section>
 
     <div class="pager">
-      <button id="load-more" class="btn">Cargar más</button>
+      <button id="load-more" class="btn" aria-live="off">Cargar más</button>
     </div>
   </main>
 
-  <!-- 🔐 Modal: Inicio de sesión -->
-  <div id="login-modal" class="modal" aria-hidden="true">
+  <div id="login-modal" class="modal" aria-hidden="true" style="display:none;">
     <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="login-title">
       <button class="modal-close" id="close-login" aria-label="Cerrar">✕</button>
       <h2 id="login-title">Iniciar sesión</h2>
 
       <form id="login-form" class="login-form">
-        <label>
-          Correo
-          <input type="email" id="login-email" required placeholder="tu@correo.com" />
-        </label>
-        <label>
-          Contraseña
-          <input type="password" id="login-pass" required minlength="6" placeholder="●●●●●●" />
-        </label>
+        <label for="login-email">Correo</label>
+        <input type="email" id="login-email" required placeholder="tu@correo.com" autocomplete="username" />
+        
+        <label for="login-pass">Contraseña</label>
+        <input type="password" id="login-pass" required minlength="6" placeholder="●●●●●●" autocomplete="current-password" />
+        
         <div class="login-actions">
           <button type="submit" class="btn">Entrar</button>
           <button type="button" id="login-guest" class="btn-outline">Invitado</button>
@@ -131,7 +116,6 @@
     </div>
   </div>
 
-  <!-- 🧩 Plantilla de artículo -->
   <template id="tpl-article">
     <article class="card">
       <div class="card-media">
@@ -153,7 +137,6 @@
     </article>
   </template>
 
-  <!-- ⚓ Footer -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <div class="footer-cols">
@@ -162,71 +145,14 @@
           <small>© <span id="year"></span> El Solazo de Hermosillo</small>
         </div>
         <div>
-          <a href="#">Privacidad</a>
-          <a href="#">Contacto</a>
+          <a href="politica.html">Politica</a>
+          <a href="privacidad.html">Privacidad</a>
+          <a href="contacto.html">Contacto</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <!-- 📜 Scripts -->
-  <script type="module" src="./app.js"></script>
-  
-<script>
-// 🧑‍💼 Credenciales predefinidas del administrador
-const ADMIN_USER = {
-  email: "adminprueba@elsolazo.com",
-  password: "AlexisMontaño",
-  role: "admin",
-  permissions: {
-    editNews: true,
-    deleteNews: true,
-    viewDashboard: true,
-    manageUsers: true,
-    modifyDatabase: false // ❌ no puede tocar la base de datos
-  }
-};
-
-// 🔐 Manejador del formulario de login
-document.getElementById("login-form").addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const email = document.getElementById("login-email").value.trim();
-  const pass = document.getElementById("login-pass").value.trim();
-
-  // Verificar si es el admin
-  if (email === ADMIN_USER.email && pass === ADMIN_USER.password) {
-    localStorage.setItem("user", JSON.stringify(ADMIN_USER));
-    localStorage.setItem("role", "admin");
-    alert("Bienvenido, Alexis.");
-    document.getElementById("login-modal").style.display = "none";
-    document.getElementById("admin-link").hidden = false;
-    return;
-  }
-
-  // Si no es admin → usuario normal
-  alert("credenciales incorrectas.");
-});
-
-// 🚪 Ingreso como invitado
-document.getElementById("login-guest").addEventListener("click", () => {
-  localStorage.setItem("user", JSON.stringify({ role: "guest" }));
-  localStorage.setItem("role", "guest");
-  alert("Has ingresado como invitado.");
-  document.getElementById("login-modal").style.display = "none";
-});
-
-// 🧭 Mostrar botón admin si ya hay sesión activa
-window.addEventListener("DOMContentLoaded", () => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  if (user && user.role === "admin") {
-    document.getElementById("admin-link").hidden = false;
-  }
-});
-</script>
-
-  
-</script>
   <script>
     // ☀️ Movimiento del sol con el scroll
     const sun = document.getElementById("sun");
@@ -234,12 +160,8 @@ window.addEventListener("DOMContentLoaded", () => {
       const scrollY = window.scrollY;
       sun.style.transform = `translate(-50%, ${scrollY * 0.3}px)`;
     });
-
-    // 📅 Año automático en el footer
-    document.getElementById("year").textContent = new Date().getFullYear();
     </script>
-     <!-- 📊 METRICOOL (integrado correctamente) -->
-  <script>
+     <script>
     function loadScript(a){
       var b=document.getElementsByTagName("head")[0],
       c=document.createElement("script");
@@ -253,5 +175,6 @@ window.addEventListener("DOMContentLoaded", () => {
       beTracker.t({hash:"4fa8631b16f189d7de394306d1667aa"})
     });
   </script>
-  </body>
+  <script type="module" src="./app.js"></script>
+</body>
 </html>

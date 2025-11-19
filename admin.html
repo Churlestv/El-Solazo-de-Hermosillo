@@ -3,35 +3,32 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Panel Administrador</title>
+  <title>Panel Administrador - El Solazo</title>
   <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
 
 <header class="admin-header">
   <div class="header-inner">
-    <a class="logo">
+    <a href="#" class="logo">
       <div class="logo-text">
         <strong>El Solazo</strong>
         <small>Panel de Administración</small>
       </div>
     </a>
-
     <button id="logout" class="btn-ghost">Cerrar Sesión</button>
   </div>
 </header>
 
+<main class="container">
 
-<div class="container">
-
-  <!-- Configuración principal -->
   <div class="card">
     <h2>Configuración Principal</h2>
 
-    <label>Título del sitio</label>
+    <label for="main-title">Título del sitio</label>
     <input type="text" id="main-title" />
 
-    <label>Descripción del sitio</label>
+    <label for="main-desc">Descripción del sitio</label>
     <textarea id="main-desc"></textarea>
 
     <div class="row right">
@@ -40,31 +37,32 @@
   </div>
 
 
-  <!-- Nueva noticia -->
   <div class="card">
     <h2>Agregar / Editar Noticia</h2>
 
     <form id="note-form">
       <input type="hidden" id="edit-id" />
 
-      <label>Título</label>
+      <label for="note-title">Título</label>
       <input type="text" id="note-title" required />
 
-      <label>Descripción / extracto</label>
+      <label for="note-excerpt">Descripción / extracto</label>
       <textarea id="note-excerpt"></textarea>
 
-      <label>URL original de la noticia</label>
+      <label for="note-url">URL original de la noticia</label>
       <input type="url" id="note-url" />
 
       <button type="button" class="btn-ghost" id="fetch-metadata">Obtener Metadata</button>
 
-      <label>Imágenes</label>
-      <div id="images-container"></div>
-
-      <div class="row gap">
-        <button type="button" class="btn-ghost" id="add-image-field">Agregar imagen</button>
-        <button type="button" class="btn-ghost" id="clear-images">Limpiar imágenes</button>
-      </div>
+      <fieldset>
+        <legend>Imágenes</legend>
+        <div id="images-container"></div>
+      
+        <div class="row gap">
+          <button type="button" class="btn-ghost" id="add-image-field">Agregar imagen</button>
+          <button type="button" class="btn-ghost" id="clear-images">Limpiar imágenes</button>
+        </div>
+      </fieldset>
 
       <div class="row right">
         <button class="btn" type="submit">Guardar noticia</button>
@@ -73,13 +71,12 @@
   </div>
 
 
-  <!-- Lista -->
   <div class="card">
     <h2>Noticias Guardadas</h2>
     <div id="notes-list"></div>
   </div>
 
-</div>
+</main>
 
 <script src="admin.js"></script>
 </body>

@@ -94,34 +94,43 @@ body {
 .main-nav ul {
   list-style: none;
   display: flex;
-  gap: 28px;
+  gap: 24px;
+  align-items: center; /* Alineación centrada */
 }
 
-.main-nav a {
+/* --- ESTILOS DE MENÚ ACTUALIZADOS (Punto 1) --- */
+/* Aplica tanto a enlaces <a> como a botones <button> */
+.nav-link {
   text-decoration: none;
   color: var(--muted);
   font-weight: 500;
   transition: var(--transition);
   position: relative;
+  background: transparent !important; /* Quita fondo de botones */
+  border: none !important;          /* Quita borde de botones */
+  box-shadow: none !important;      /* Quita sombra de botones */
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 5px 0;
 }
 
-.main-nav a::after {
+.nav-link::after {
   content: "";
   position: absolute;
   width: 0%;
   height: 2px;
-  bottom: -4px;
+  bottom: -2px; /* Ajuste fino */
   left: 0;
   background: var(--accent);
   transition: width 0.3s ease;
 }
 
-.main-nav a:hover {
-  color: var(--text);
+.nav-link:hover {
+  color: var(--text); /* Color más oscuro al pasar mouse */
 }
 
-.main-nav a:hover::after {
-  width: 100%;
+.nav-link:hover::after {
+  width: 100%; /* Animación de línea */
 }
 
 .header-actions {
@@ -130,19 +139,52 @@ body {
   gap: 12px;
 }
 
+/* Botones de acción (iconos) */
+.icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.icon-btn:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* Botón principal redondeado */
 .btn {
   background: var(--accent);
   color: white;
-  padding: 8px 16px;
+  padding: 8px 18px;
   border: none;
   border-radius: 999px;
   font-weight: 600;
   cursor: pointer;
   transition: var(--transition);
+  font-size: 0.95rem;
 }
 
 .btn:hover {
   background: #b57c25;
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    padding: 8px 18px;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: var(--transition);
+}
+.btn-outline:hover {
+    background: var(--accent);
+    color: #fff;
 }
 
 /* ===== HERO ===== */
@@ -171,6 +213,35 @@ body {
   margin-top: 6px;
 }
 
+/* ===== CONTROLES (Búsqueda y Filtros) ===== */
+.controls {
+    max-width: 1100px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.search-wrap {
+    display: flex;
+    align-items: center;
+    background: var(--card);
+    border-radius: 50px;
+    padding: 5px 15px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(0,0,0,0.05);
+}
+.search-wrap input {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 8px;
+    width: 200px;
+    color: var(--text);
+}
+
 /* ===== GRID DE NOTICIAS ===== */
 .news-grid {
   max-width: 1100px;
@@ -181,12 +252,22 @@ body {
   padding: 0 20px;
 }
 
+.placeholder {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-style: italic;
+}
+
 .card {
   background: var(--card);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   overflow: hidden;
   transition: var(--transition);
+  display: flex;
+  flex-direction: column;
 }
 
 .card:hover {
@@ -194,52 +275,102 @@ body {
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
 }
 
+.card-media {
+    position: relative;
+    height: 200px;
+}
+
 .card img {
   width: 100%;
-  height: 220px;
+  height: 100%;
   object-fit: cover;
 }
 
-.card-content {
-  padding: 20px;
+.card-tags {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    gap: 5px;
+}
+.tag {
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    backdrop-filter: blur(4px);
+    cursor: pointer;
 }
 
-.card-content h3 {
+.card-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 10px;
+}
+.fav-btn {
+    background: none; border: none; cursor: pointer; font-size: 1.2rem; color: var(--accent);
+}
+
+.card-body h3 {
   margin-bottom: 8px;
   font-size: 18px;
+  line-height: 1.4;
 }
 
-.card-content p {
+.card-body p.excerpt {
   color: var(--muted);
   font-size: 15px;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
+  flex: 1;
 }
 
-.card-content a {
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.read-more {
   color: var(--accent);
   font-weight: 600;
   text-decoration: none;
   transition: color 0.2s ease;
 }
-
-.card-content a:hover {
-  color: #b37524;
+.share-btn {
+    background: none; border: none; cursor: pointer; font-size: 0.9rem; color: var(--muted);
 }
+
+/* Paginación */
+.pager { text-align: center; margin-bottom: 60px; }
+
 
 /* ===== FOOTER ===== */
 .site-footer {
   background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(10px);
-  padding: 20px 0;
+  padding: 40px 0;
   text-align: center;
   color: var(--muted);
   font-size: 14px;
   border-top: 1px solid rgba(0, 0, 0, 0.04);
 }
-
-.site-footer a {
-  color: var(--accent);
-  text-decoration: none;
+.footer-cols {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1100px;
+    margin: auto;
+    padding: 0 20px;
 }
 
 /* ===== RESPONSIVO ===== */
@@ -249,7 +380,194 @@ body {
     text-align: center;
   }
 
-  .main-nav ul {
-    display: none;
+  .main-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background: var(--card);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      flex-direction: column;
   }
+  .main-nav.active { display: flex; }
+  
+  .main-nav ul {
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+  }
+  .nav-link { width: 100%; text-align: left; }
+  
+  .footer-cols { flex-direction: column; gap: 20px; text-align: center; }
 }
+
+/* =========================================
+   MODAL DE LOGIN MEJORADO (Estilos Nuevos)
+   ========================================= */
+
+/* Fondo Oscuro del Modal */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
+    justify-content: center; 
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px); /* Efecto borroso de fondo */
+}
+
+/* Tarjeta del Modal */
+.modal-card {
+    background: var(--card);
+    padding: 2.5rem;
+    border-radius: 24px; /* Bordes muy redondeados */
+    width: 90%;
+    max-width: 420px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Botón de cerrar */
+.modal-close {
+    position: absolute; 
+    top: 20px; 
+    right: 20px;
+    background: transparent; 
+    border: none;
+    font-size: 1.2rem; 
+    cursor: pointer; 
+    color: var(--muted);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    transition: background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { background: rgba(0,0,0,0.05); color: var(--text); }
+
+/* Cabecera del login */
+.auth-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+.auth-header h2 { margin: 0 0 8px; color: var(--text); font-size: 1.5rem; }
+.auth-header p { color: var(--muted); font-size: 0.9rem; margin: 0; }
+
+/* Botones Sociales */
+.social-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.btn-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    background: var(--card); /* Fondo blanco/oscuro según tema */
+    color: var(--text);
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-social:hover {
+    background: rgba(0,0,0,0.02);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Colores específicos de marcas */
+.btn-social.google { color: #db4437; border-color: rgba(219, 68, 55, 0.3); }
+.btn-social.facebook { color: #1877f2; border-color: rgba(24, 119, 242, 0.3); }
+.btn-social.phone { color: #10b981; border-color: rgba(16, 185, 129, 0.3); }
+
+/* Divisor "o usa tu correo" */
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin: 20px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid #e2e8f0;
+}
+.divider span { padding: 0 15px; }
+
+/* Formulario de Login */
+.login-form { display: flex; flex-direction: column; gap: 12px; }
+
+.login-form label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    display: block;
+    color: var(--text);
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+.login-form input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Texto inferior (Cambiar a registro) */
+.toggle-auth {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+.toggle-auth a {
+    color: var(--accent);
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: none;
+    margin-left: 5px;
+}
+.toggle-auth a:hover { text-decoration: underline; }
+
+/* Botón fantasma (Invitado) */
+.btn-ghost {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 5px;
+}
+.btn-ghost:hover { color: var(--text); }
