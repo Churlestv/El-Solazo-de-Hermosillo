@@ -23,9 +23,9 @@ let isLoginMode = true;
   const saved = JSON.parse(localStorage.getItem(USERS_KEY) || "null");
   if (!saved) {
     const defaults = [
-      { username: "adminprueba@elsolazo.com", password: "AlexisMontaño", role: "admin" }, // Admin principal
-      { username: "master", password: "1234", role: "master" },
-      { username: "editor", password: "1234", role: "editor" }
+      { username: "adminprueba@elsolazo.com", password: "AlexisMontaño", role: "master" }, // Admin principal
+      { username: "admin@elsolazo.com", password: "1234", role: "admin" },
+      { username: "editor@elsolazo.com", password: "1234", role: "editor" }
     ];
     localStorage.setItem(USERS_KEY, JSON.stringify(defaults));
   }
@@ -62,17 +62,121 @@ togglePassBtn?.addEventListener("click", () => {
     }
 });
 
-// 4. Simulación Login Teléfono
-phoneBtn?.addEventListener('click', () => {
-    const phone = prompt("Ingresa tu número (10 dígitos):");
-    if(phone && phone.length === 10) {
-        alert("Código enviado (Simulación: 1234)");
-        if(prompt("Código:") === "1234") {
-            localStorage.setItem(SESSION_KEY, JSON.stringify({ name: "Usuario Móvil", role: "user" }));
-            window.location.href = "index.html";
-        }
-    }
+/* login.js - Conexión Real con Firebase */
+
+// 1. PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE
+// (La obtienes en la consola de Firebase: Project Settings > General)
+const firebaseConfig = {
+  apiKey: "AIzaSyAiOfmKx6EULdlXuDmstH7-GBkJlq_hG0E",
+  authDomain: "elsolazodehermosillo-6d59c.firebaseapp.com",
+  projectId: "elsolazodehermosillo-6d59c",
+  storageBucket: "elsolazodehermosillo-6d59c.firebasestorage.app",
+  messagingSenderId: "1096583416274",
+  appId: "1:1096583416274:web:13473844ebb1444511600b",
+  measurementId: "G-MTCF0MH6GF"
+};
+
+// Inicializar Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+
+// Referencias al DOM
+const btnGoogle = document.querySelector(".btn-social.google");
+const btnFacebook = document.querySelector(".btn-social.facebook");
+const btnPhone = document.querySelector(".btn-social.phone");
+
+// ==========================================
+// 🟢 1. LOGIN CON GOOGLE
+// ==========================================
+btnGoogle?.addEventListener("click", () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  
+  auth.signInWithPopup(provider)
+    .then((result) => {
+      const user = result.user;
+      guardarSesionLocal(user, "google");
+    })
+    .catch((error) => {
+      console.error(error);
+      alert("Error con Google: " + error.message);
+    });
 });
+
+// ==========================================
+// 🔵 2. LOGIN CON FACEBOOK
+// ==========================================
+btnFacebook?.addEventListener("click", () => {
+  const provider = new firebase.auth.FacebookAuthProvider();
+
+  auth.signInWithPopup(provider)
+    .then((result) => {
+      const user = result.user;
+      guardarSesionLocal(user, "facebook");
+    })
+    .catch((error) => {
+      // Error común: Facebook requiere que la web tenga HTTPS (candadito)
+      alert("Error con Facebook: " + error.message);
+    });
+});
+
+// ==========================================
+// 📱 3. LOGIN CON TELÉFONO
+// ==========================================
+// Configurar el Captcha invisible (Requisito de seguridad)
+window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+  'size': 'invisible'
+});
+
+btnPhone?.addEventListener("click", () => {
+  const phoneNumber = prompt("Ingresa tu número con código de país (ej: +52662...)");
+  if (!phoneNumber) return;
+
+  const appVerifier = window.recaptchaVerifier;
+
+  auth.signInWithPhoneNumber(phoneNumber, appVerifier)
+    .then((confirmationResult) => {
+      // El SMS se ha enviado
+      const code = prompt("Te enviamos un SMS. Ingresa el código:");
+      return confirmationResult.confirm(code);
+    })
+    .then((result) => {
+      const user = result.user;
+      // Crear un objeto usuario con el teléfono como nombre
+      const userData = {
+        displayName: user.phoneNumber,
+        email: "Telefono",
+        photoURL: "new-Logo.png" // Logo por defecto
+      };
+      guardarSesionLocal(userData, "phone");
+    })
+    .catch((error) => {
+      alert("Error SMS: " + error.message);
+      // Resetear captcha si falla
+      window.recaptchaVerifier.render().then(function(widgetId) {
+        grecaptcha.reset(widgetId);
+      });
+    });
+});
+
+// ==========================================
+// 💾 FUNCIÓN COMÚN: GUARDAR Y REDIRIGIR
+// ==========================================
+function guardarSesionLocal(userFirebase, provider) {
+  // Convertimos el usuario de Firebase al formato de tu app
+  const usuarioApp = {
+    name: userFirebase.displayName || "Usuario",
+    email: userFirebase.email || userFirebase.phoneNumber,
+    photo: userFirebase.photoURL,
+    role: "user", // Por defecto usuario normal
+    provider: provider
+  };
+
+  localStorage.setItem("user", JSON.stringify(usuarioApp));
+  alert(`Bienvenido ${usuarioApp.name}`);
+  window.location.href = "index.html";
+}
+
+// (Mantener aquí abajo el resto de tu lógica de login con correo/contraseña normal...)
 
 // 5. Proceso de Login / Registro principal
 loginForm.addEventListener("submit", (e) => {
@@ -127,5 +231,6 @@ loginForm.addEventListener("submit", (e) => {
     localStorage.setItem(SESSION_KEY, JSON.stringify(newUser));
     alert("Cuenta creada. Bienvenido.");
     window.location.href = "index.html";
+    
   }
 });
