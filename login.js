@@ -1,10 +1,28 @@
-/* login.js - Maneja Admin y Usuarios */
+/* login.js - Manejo unificado: Local (Admins) + Firebase (Social) */
 
-const USERS_KEY = "solazo_users";     // Usuarios Admin predefinidos
-const DB_KEY = "solazo_users_db";     // Usuarios registrados en la web
-const SESSION_KEY = "user";
+// === 1. CONFIGURACIÓN DE FIREBASE ===
+const firebaseConfig = {
+  apiKey: "AIzaSyAiOfmKx6EULdlXuDmstH7-GBkJlq_hG0E",
+  authDomain: "elsolazodehermosillo-6d59c.firebaseapp.com",
+  projectId: "elsolazodehermosillo-6d59c",
+  storageBucket: "elsolazodehermosillo-6d59c.firebasestorage.app",
+  messagingSenderId: "1096583416274",
+  appId: "1:1096583416274:web:13473844ebb1444511600b",
+  measurementId: "G-MTCF0MH6GF"
+};
 
-// Elementos DOM
+// Inicializar Firebase
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+
+// === 2. CONSTANTES Y VARIABLES LOCALES ===
+const USERS_KEY = "solazo_users";     // Admins hardcoded
+const DB_KEY = "solazo_users_db";     // Usuarios registrados por formulario
+const SESSION_KEY = "user";           // Sesión activa
+
+// Referencias DOM
 const loginForm = document.getElementById("login-form");
 const toggleLink = document.getElementById("toggle-link");
 const toggleText = document.getElementById("toggle-text");
@@ -15,15 +33,17 @@ const nameInput = document.getElementById("reg-name");
 const phoneBtn = document.getElementById("btn-phone-login");
 const togglePassBtn = document.getElementById("toggle-password");
 const passwordEl = document.getElementById("password");
+const btnGoogle = document.querySelector(".btn-social.google");
+const btnFacebook = document.querySelector(".btn-social.facebook");
 
 let isLoginMode = true;
 
-// 1. Inicializar Admins por defecto si no existen
+// === 3. INICIALIZAR ADMINS (Solo demo local) ===
 (function initAdmins() {
   const saved = JSON.parse(localStorage.getItem(USERS_KEY) || "null");
   if (!saved) {
     const defaults = [
-      { username: "adminprueba@elsolazo.com", password: "AlexisMontaño", role: "master" }, // Admin principal
+      { username: "adminprueba@elsolazo.com", password: "AlexisMontaño", role: "master" },
       { username: "admin@elsolazo.com", password: "1234", role: "admin" },
       { username: "editor@elsolazo.com", password: "1234", role: "editor" }
     ];
@@ -31,7 +51,9 @@ let isLoginMode = true;
   }
 })();
 
-// 2. Alternar entre Login y Registro
+// === 4. LÓGICA DE INTERFAZ ===
+
+// Alternar Login / Registro
 toggleLink?.addEventListener('click', () => {
   isLoginMode = !isLoginMode;
   if (isLoginMode) {
@@ -51,7 +73,7 @@ toggleLink?.addEventListener('click', () => {
   }
 });
 
-// 3. Mostrar/Ocultar contraseña
+// Mostrar / Ocultar Password
 togglePassBtn?.addEventListener("click", () => {
     if (passwordEl.type === "password") {
         passwordEl.type = "text";
@@ -62,72 +84,58 @@ togglePassBtn?.addEventListener("click", () => {
     }
 });
 
-/* login.js - Conexión Real con Firebase */
+// === 5. LÓGICA FIREBASE (Social Login) ===
 
-// 1. PEGA AQUÍ TU CONFIGURACIÓN DE FIREBASE
-// (La obtienes en la consola de Firebase: Project Settings > General)
-const firebaseConfig = {
-  apiKey: "AIzaSyAiOfmKx6EULdlXuDmstH7-GBkJlq_hG0E",
-  authDomain: "elsolazodehermosillo-6d59c.firebaseapp.com",
-  projectId: "elsolazodehermosillo-6d59c",
-  storageBucket: "elsolazodehermosillo-6d59c.firebasestorage.app",
-  messagingSenderId: "1096583416274",
-  appId: "1:1096583416274:web:13473844ebb1444511600b",
-  measurementId: "G-MTCF0MH6GF"
-};
+// Función auxiliar para guardar sesión de Firebase en LocalStorage y redirigir
+function guardarSesionLocal(userFirebase, provider) {
+  const usuarioApp = {
+    name: userFirebase.displayName || userFirebase.phoneNumber || "Usuario",
+    email: userFirebase.email || userFirebase.phoneNumber,
+    photo: userFirebase.photoURL,
+    role: "user",
+    provider: provider,
+    uid: userFirebase.uid
+  };
 
-// Inicializar Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
+  localStorage.setItem(SESSION_KEY, JSON.stringify(usuarioApp));
+  alert(`Bienvenido ${usuarioApp.name}`);
+  window.location.href = "index.html";
+}
 
-// Referencias al DOM
-const btnGoogle = document.querySelector(".btn-social.google");
-const btnFacebook = document.querySelector(".btn-social.facebook");
-const btnPhone = document.querySelector(".btn-social.phone");
-
-// ==========================================
-// 🟢 1. LOGIN CON GOOGLE
-// ==========================================
+// LOGIN GOOGLE
 btnGoogle?.addEventListener("click", () => {
   const provider = new firebase.auth.GoogleAuthProvider();
-  
   auth.signInWithPopup(provider)
-    .then((result) => {
-      const user = result.user;
-      guardarSesionLocal(user, "google");
-    })
-    .catch((error) => {
-      console.error(error);
-      alert("Error con Google: " + error.message);
-    });
+    .then((result) => guardarSesionLocal(result.user, "google"))
+    .catch((error) => alert("Error Google: " + error.message));
 });
 
-// ==========================================
-// 🔵 2. LOGIN CON FACEBOOK
-// ==========================================
+// LOGIN FACEBOOK
 btnFacebook?.addEventListener("click", () => {
   const provider = new firebase.auth.FacebookAuthProvider();
-
   auth.signInWithPopup(provider)
-    .then((result) => {
-      const user = result.user;
-      guardarSesionLocal(user, "facebook");
-    })
+    .then((result) => guardarSesionLocal(result.user, "facebook"))
     .catch((error) => {
-      // Error común: Facebook requiere que la web tenga HTTPS (candadito)
-      alert("Error con Facebook: " + error.message);
+       console.error(error);
+       if (error.code === 'auth/account-exists-with-different-credential') {
+         alert("Ya existe una cuenta con este email usando otro método (Google/Correo).");
+       } else {
+         alert("Error Facebook: " + error.message + "\n\nRevisa que tu App ID y Dominios estén configurados en Meta Developers.");
+       }
     });
 });
 
-// ==========================================
-// 📱 3. LOGIN CON TELÉFONO
-// ==========================================
-// Configurar el Captcha invisible (Requisito de seguridad)
-window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-  'size': 'invisible'
-});
+// LOGIN TELÉFONO
+// Configurar Recaptcha invisible al cargar
+window.onload = function() {
+    if (!window.recaptchaVerifier) {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+            'size': 'invisible'
+        });
+    }
+};
 
-btnPhone?.addEventListener("click", () => {
+phoneBtn?.addEventListener("click", () => {
   const phoneNumber = prompt("Ingresa tu número con código de país (ej: +52662...)");
   if (!phoneNumber) return;
 
@@ -135,50 +143,23 @@ btnPhone?.addEventListener("click", () => {
 
   auth.signInWithPhoneNumber(phoneNumber, appVerifier)
     .then((confirmationResult) => {
-      // El SMS se ha enviado
       const code = prompt("Te enviamos un SMS. Ingresa el código:");
+      if(!code) return;
       return confirmationResult.confirm(code);
     })
-    .then((result) => {
-      const user = result.user;
-      // Crear un objeto usuario con el teléfono como nombre
-      const userData = {
-        displayName: user.phoneNumber,
-        email: "Telefono",
-        photoURL: "new-Logo.png" // Logo por defecto
-      };
-      guardarSesionLocal(userData, "phone");
-    })
+    .then((result) => guardarSesionLocal(result.user, "phone"))
     .catch((error) => {
+      console.error(error);
       alert("Error SMS: " + error.message);
-      // Resetear captcha si falla
-      window.recaptchaVerifier.render().then(function(widgetId) {
-        grecaptcha.reset(widgetId);
-      });
+      // Resetear captcha
+      if(window.recaptchaVerifier) {
+          try { window.recaptchaVerifier.render().then(id => grecaptcha.reset(id)); } catch(e){}
+      }
     });
 });
 
-// ==========================================
-// 💾 FUNCIÓN COMÚN: GUARDAR Y REDIRIGIR
-// ==========================================
-function guardarSesionLocal(userFirebase, provider) {
-  // Convertimos el usuario de Firebase al formato de tu app
-  const usuarioApp = {
-    name: userFirebase.displayName || "Usuario",
-    email: userFirebase.email || userFirebase.phoneNumber,
-    photo: userFirebase.photoURL,
-    role: "user", // Por defecto usuario normal
-    provider: provider
-  };
 
-  localStorage.setItem("user", JSON.stringify(usuarioApp));
-  alert(`Bienvenido ${usuarioApp.name}`);
-  window.location.href = "index.html";
-}
-
-// (Mantener aquí abajo el resto de tu lógica de login con correo/contraseña normal...)
-
-// 5. Proceso de Login / Registro principal
+// === 6. LÓGICA FORMULARIO (Local Email/Pass) ===
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -186,31 +167,30 @@ loginForm.addEventListener("submit", (e) => {
   const pass = document.getElementById("password").value.trim();
 
   if (isLoginMode) {
-    // --- MODO LOGIN ---
-
-    // A) Buscar en Admins
+    // --- LOGIN ---
+    // 1. Buscar en Admins (Local Hardcoded)
     const admins = JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
     const adminFound = admins.find(u => u.username === email && u.password === pass);
 
     if (adminFound) {
       localStorage.setItem(SESSION_KEY, JSON.stringify(adminFound));
-      window.location.href = "admin.html"; // Admin va al panel
+      window.location.href = "admin.html";
       return;
     }
 
-    // B) Buscar en Usuarios Registrados
+    // 2. Buscar en Usuarios Registrados (Local DB)
     const users = JSON.parse(localStorage.getItem(DB_KEY) || "[]");
     const userFound = users.find(u => u.email === email && u.password === pass);
 
     if (userFound) {
       localStorage.setItem(SESSION_KEY, JSON.stringify(userFound));
-      window.location.href = "index.html"; // Usuario normal va al inicio
+      window.location.href = "index.html";
     } else {
       alert("Credenciales incorrectas.");
     }
 
   } else {
-    // --- MODO REGISTRO ---
+    // --- REGISTRO ---
     const users = JSON.parse(localStorage.getItem(DB_KEY) || "[]");
     
     if (users.find(u => u.email === email)) {
@@ -222,15 +202,15 @@ loginForm.addEventListener("submit", (e) => {
         name: nameInput.value.trim(),
         email: email,
         password: pass,
-        role: "user"
+        role: "user",
+        provider: "local"
     };
     
     users.push(newUser);
     localStorage.setItem(DB_KEY, JSON.stringify(users));
-    
     localStorage.setItem(SESSION_KEY, JSON.stringify(newUser));
+    
     alert("Cuenta creada. Bienvenido.");
     window.location.href = "index.html";
-    
   }
 });
